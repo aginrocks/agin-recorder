@@ -11,7 +11,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,12 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import rocks.agin.recorder.util.rememberHapticFeedbackHelper
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun ClapboardValue(
     label: String,
     value: String,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -46,10 +47,16 @@ fun ClapboardValue(
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(32.dp))
-            .clickable {
-                haptics.click()
-                onClick()
-            },
+            .combinedClickable(
+                onClick = {
+                    haptics.click()
+                    onClick()
+                },
+                onLongClick = {
+                    haptics.heavyClick()
+                    onLongClick()
+                }
+            ),
         color = containerColor,
         shape = RoundedCornerShape(32.dp)
     ) {
@@ -73,10 +80,10 @@ fun ClapboardValue(
                 transitionSpec = {
                     if (targetState > initialState) {
                         slideInVertically { height -> height } + fadeIn() togetherWith
-                                slideOutVertically { height -> -height } + fadeOut()
+                            slideOutVertically { height -> -height } + fadeOut()
                     } else {
                         slideInVertically { height -> -height } + fadeIn() togetherWith
-                                slideOutVertically { height -> height } + fadeOut()
+                            slideOutVertically { height -> height } + fadeOut()
                     }.using(
                         SizeTransform(clip = false)
                     )
