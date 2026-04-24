@@ -117,6 +117,8 @@ fun ClapboardScreen() {
                             value = roll.toString().padStart(3, '0'),
                             onClick = {
                                 roll++
+                                scene = 1
+                                take = 1
                                 haptics.heavyClick()
                             },
                             onLongClick = { editing = EditingValue.ROLL },
@@ -163,6 +165,8 @@ fun ClapboardScreen() {
                             value = roll.toString().padStart(3, '0'),
                             onClick = {
                                 roll++
+                                scene = 1
+                                take = 1
                                 haptics.heavyClick()
                             },
                             onLongClick = { editing = EditingValue.ROLL },
