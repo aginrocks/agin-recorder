@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -30,7 +32,15 @@ fun NumberInputDialog(
     onConfirm: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var textValue by remember { mutableStateOf(initialValue.toString()) }
+    val initialString = initialValue.toString()
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = initialString,
+                selection = TextRange(0, initialString.length)
+            )
+        )
+    }
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
@@ -43,8 +53,12 @@ fun NumberInputDialog(
         text = {
             Column {
                 OutlinedTextField(
-                    value = textValue,
-                    onValueChange = { if (it.all { char -> char.isDigit() }) textValue = it },
+                    value = textFieldValue,
+                    onValueChange = { newValue ->
+                        if (newValue.text.all { char -> char.isDigit() }) {
+                            textFieldValue = newValue
+                        }
+                    },
                     label = { Text("Enter value") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier
@@ -57,7 +71,7 @@ fun NumberInputDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    textValue.toIntOrNull()?.let { onConfirm(it) }
+                    textFieldValue.text.toIntOrNull()?.let { onConfirm(it) }
                 }
             ) {
                 Text("Confirm")

@@ -24,6 +24,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import android.content.res.Configuration
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -46,6 +48,8 @@ fun ClapboardScreen() {
     var scene by remember { mutableIntStateOf(1) }
     var take by remember { mutableIntStateOf(1) }
     var editing by remember { mutableStateOf(EditingValue.NONE) }
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val haptics = rememberHapticFeedbackHelper()
 
@@ -106,52 +110,103 @@ fun ClapboardScreen() {
                     color = MaterialTheme.colorScheme.primary
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ClapboardValue(
-                    label = "Roll",
-                    value = roll.toString().padStart(3, '0'),
-                    onClick = {
-                        roll++
-                        haptics.heavyClick()
-                    },
-                    onLongClick = { editing = EditingValue.ROLL },
-                    modifier = Modifier.weight(1f),
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-
-                Row(
-                    modifier = Modifier.weight(1f),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp)
-                ) {
-                    ClapboardValue(
-                        label = "Scene",
-                        value = scene.toString(),
-                        onClick = {
-                            scene++
-                            haptics.heavyClick()
-                        },
-                        onLongClick = { editing = EditingValue.SCENE },
+                if (isLandscape) {
+                    Row(
                         modifier = Modifier.weight(1f),
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                    ClapboardValue(
-                        label = "Take",
-                        value = take.toString(),
-                        onClick = {
-                            take++
-                            haptics.heavyClick()
-                        },
-                        onLongClick = { editing = EditingValue.TAKE },
+                        horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
+                        ClapboardValue(
+                            label = "Roll",
+                            value = roll.toString().padStart(3, '0'),
+                            onClick = {
+                                roll++
+                                haptics.heavyClick()
+                            },
+                            onLongClick = { editing = EditingValue.ROLL },
+                            modifier = Modifier.weight(1f),
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            valueFontSize = 120.sp
+                        )
+                        ClapboardValue(
+                            label = "Scene",
+                            value = scene.toString(),
+                            onClick = {
+                                scene++
+                                take = 1
+                                haptics.heavyClick()
+                            },
+                            onLongClick = { editing = EditingValue.SCENE },
+                            modifier = Modifier.weight(1f),
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            valueFontSize = 120.sp
+                        )
+                        ClapboardValue(
+                            label = "Take",
+                            value = take.toString(),
+                            onClick = {
+                                take++
+                                haptics.heavyClick()
+                            },
+                            onLongClick = { editing = EditingValue.TAKE },
+                            modifier = Modifier.weight(1f),
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                            valueFontSize = 120.sp
+                        )
+                    }
+                } else {
+                    Column(
                         modifier = Modifier.weight(1f),
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                    )
+                        verticalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
+                        ClapboardValue(
+                            label = "Roll",
+                            value = roll.toString().padStart(3, '0'),
+                            onClick = {
+                                roll++
+                                haptics.heavyClick()
+                            },
+                            onLongClick = { editing = EditingValue.ROLL },
+                            modifier = Modifier.weight(1f),
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(24.dp)
+                        ) {
+                            ClapboardValue(
+                                label = "Scene",
+                                value = scene.toString(),
+                                onClick = {
+                                    scene++
+                                    take = 1
+                                    haptics.heavyClick()
+                                },
+                                onLongClick = { editing = EditingValue.SCENE },
+                                modifier = Modifier.weight(1f),
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                            ClapboardValue(
+                                label = "Take",
+                                value = take.toString(),
+                                onClick = {
+                                    take++
+                                    haptics.heavyClick()
+                                },
+                                onLongClick = { editing = EditingValue.TAKE },
+                                modifier = Modifier.weight(1f),
+                                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                            )
+                        }
+                    }
                 }
 
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }
