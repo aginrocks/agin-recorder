@@ -13,16 +13,12 @@ ktlint {
 
 android {
     namespace = "rocks.agin.recorder"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "rocks.agin.recorder"
         minSdk = 33
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
