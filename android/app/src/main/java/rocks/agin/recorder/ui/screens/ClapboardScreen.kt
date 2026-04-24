@@ -92,19 +92,16 @@ fun ClapboardScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Expressive background shapes
-            ExpressiveBackground()
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
+                    .padding(horizontal = 12.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "RECORDER",
-                    style = MaterialTheme.typography.headlineSmall,
+                    text = "AGIN RECORDER",
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 4.sp,
                     color = MaterialTheme.colorScheme.primary
@@ -126,7 +123,7 @@ fun ClapboardScreen() {
                             modifier = Modifier.weight(1f),
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            valueFontSize = 120.sp
+                            valueFontSize = 130.sp
                         )
                         ClapboardValue(
                             label = "Scene",
@@ -140,7 +137,7 @@ fun ClapboardScreen() {
                             modifier = Modifier.weight(1f),
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                            valueFontSize = 120.sp
+                            valueFontSize = 130.sp
                         )
                         ClapboardValue(
                             label = "Take",
@@ -153,7 +150,7 @@ fun ClapboardScreen() {
                             modifier = Modifier.weight(1f),
                             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                             contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                            valueFontSize = 120.sp
+                            valueFontSize = 130.sp
                         )
                     }
                 } else {
@@ -171,7 +168,8 @@ fun ClapboardScreen() {
                             onLongClick = { editing = EditingValue.ROLL },
                             modifier = Modifier.weight(1f),
                             containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            valueFontSize = 130.sp
                         )
                         Row(
                             modifier = Modifier.weight(1f),
@@ -188,7 +186,8 @@ fun ClapboardScreen() {
                                 onLongClick = { editing = EditingValue.SCENE },
                                 modifier = Modifier.weight(1f),
                                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                valueFontSize = 130.sp
                             )
                             ClapboardValue(
                                 label = "Take",
@@ -200,7 +199,8 @@ fun ClapboardScreen() {
                                 onLongClick = { editing = EditingValue.TAKE },
                                 modifier = Modifier.weight(1f),
                                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                                valueFontSize = 130.sp
                             )
                         }
                     }
@@ -212,51 +212,4 @@ fun ClapboardScreen() {
     }
 }
 
-@Composable
-fun ExpressiveBackground() {
-    val infiniteTransition = rememberInfiniteTransition(label = "background")
 
-    val animFloat by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(10000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "rotation"
-    )
-
-    val color1 = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
-    val color2 = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.2f)
-    val backgroundColor = MaterialTheme.colorScheme.background
-
-    Canvas(modifier = Modifier.fillMaxSize().graphicsLayer(alpha = 0.5f)) {
-        val width = size.width
-        val height = size.height
-
-        // Dynamic "blobs"
-        val angle = animFloat * 2 * Math.PI
-        val xOffset = sin(angle).toFloat() * 100f
-        val yOffset = cos(angle).toFloat() * 100f
-
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(color1, backgroundColor),
-                center = Offset(width * 0.2f + xOffset, height * 0.2f + yOffset),
-                radius = 600f
-            ),
-            center = Offset(width * 0.2f + xOffset, height * 0.2f + yOffset),
-            radius = 600f
-        )
-
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(color2, backgroundColor),
-                center = Offset(width * 0.8f - xOffset, height * 0.7f - yOffset),
-                radius = 800f
-            ),
-            center = Offset(width * 0.8f - xOffset, height * 0.7f - yOffset),
-            radius = 800f
-        )
-    }
-}
